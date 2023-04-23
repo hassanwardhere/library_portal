@@ -1,5 +1,5 @@
 
-.container {
+.navbar-container {
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -7,4 +7,20 @@
 .nav-link {
     color: white;
     font-weight: bold;
+}
+
+.hero-section {
+    background-image: url(../img/002.jpg);
+    height: 100vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.register-hero-section {
+    background-image: url(../img/002.jpg);
+    height: 100vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }

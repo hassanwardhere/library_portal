@@ -16,7 +16,7 @@ require_once('config/db_conn.php');
 <body>
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-        <div class="container">
+        <div class="container navbar-container">
             <a href="index.php" class="navbar-brand">Library Portal</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu"><span class="navbar-toggler-icon"></span></button>
@@ -28,10 +28,10 @@ require_once('config/db_conn.php');
                         <a href="#Home" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#Login" class="nav-link">Login</a>
+                        <a href="login.php" class="nav-link">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#SignUp" class="nav-link">Sign Up</a>
+                        <a href="register.php" class="nav-link">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -39,7 +39,19 @@ require_once('config/db_conn.php');
     </nav>
     <!-- End of Navbar -->
     <!-- Hero Section -->
-    
+    <section class="hero-section">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h1 class="text-white">Welcome to our Library Portal</h1>
+                    <p class="text-white">Explore our vast collection of books and discover your next read!</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="login.php" class="btn btn-primary me-md-2">Login</a>
+                        <a href="register.php" class="btn btn-secondary">Signup</a>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- End of Hero Section -->
 </body>
 <?php include 'footer.php' ?>
