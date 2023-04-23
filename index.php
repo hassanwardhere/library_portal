@@ -14,7 +14,7 @@ require_once('config/db_conn.php');
 </head>
 
 <body>
-    <!-- Begining of Navbar -->
+    <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container">
             <a href="index.php" class="navbar-brand">Library Portal</a>
@@ -38,7 +38,9 @@ require_once('config/db_conn.php');
         </div>
     </nav>
     <!-- End of Navbar -->
-
+    <!-- Hero Section -->
+    
+    <!-- End of Hero Section -->
 </body>
 <?php include 'footer.php' ?>
 
