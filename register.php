@@ -1,32 +1,45 @@
 <?php
 require_once('config/db_conn.php');
 
+// validate inputs and check if email is already registered
+$email_error = '';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $full_name = $_POST['full-name'];
     $school_email = $_POST['school-email'];
     $password = $_POST['password'];
     $user_type = $_POST['user-type'];
 
-    // validate inputs and check if email is already registered
-    // ...
+    if (empty($full_name) || empty($school_email) || empty($password)) {
+        $email_error = 'Please fill all required fields';
+    } elseif (!filter_var($school_email, FILTER_VALIDATE_EMAIL)) {
+        $email_error = 'Invalid email format';
+    } else {
+        $sql = "SELECT * FROM registration WHERE school_email = :school_email";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['school_email' => $school_email]);
+
+        if ($stmt->fetch(PDO::FETCH_ASSOC)) {
+            $email_error = 'Email is already registered';
+        }
+    }
 
     // insert user data into database
-    $sql = "INSERT INTO registration (full_name, school_email, password, user_type) VALUES (:full_name, :school_email, :password, :user_type)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        'full_name' => $full_name,
-        'school_email' => $school_email,
-        'password' => $password,
-        'user_type' => $user_type,
-    ]);
+    if (empty($email_error)) {
+        $sql = "INSERT INTO registration (full_name, school_email, password, user_type) VALUES (:full_name, :school_email, :password, :user_type)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'full_name' => $full_name,
+            'school_email' => $school_email,
+            'password' => $password,
+            'user_type' => $user_type,
+        ]);
 
-    // redirect to Login page
-    header("Location: auth.php");
-    exit();
+        // redirect to Login page
+        header("Location: auth.php");
+        exit();
+    }
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="mb-3">
                             <label for="school-email" class="form-label">School Email</label>
                             <input type="email" class="form-control" id="email" name="school-email" required>
+                            <span class="text-danger"><?php echo $email_error; ?></span>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>

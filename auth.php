@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+session_start();
 require('./config/db_conn.php');
 require('./vendor/autoload.php');
 include('./header.php');
@@ -14,6 +15,7 @@ include('./header.php');
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Authentication</title>
+  <?php include 'header.php' ?>
 </head>
 
 <body>
@@ -43,11 +45,8 @@ include('./header.php');
         use Sonata\GoogleAuthenticator\GoogleAuthenticator;
         use Sonata\GoogleAuthenticator\GoogleQrUrl;
 
-        $secret = "XVQ2UIGO75XRUKJO";
-        // $code = 'code';
+        $g = new GoogleAuthenticator();
 
-        $g = new \Sonata\GoogleAuthenticator\GoogleAuthenticator();
-        echo $g->getCode($secret);
         // check if the request is coming from register.php or login.php
         if (isset($_SERVER['HTTP_REFERER'])) {
           $referrer = $_SERVER['HTTP_REFERER'];
@@ -63,30 +62,51 @@ include('./header.php');
             echo "<label for='code' class='form-label text-black'>Google Authenticator Code:</label>";
             echo "<input type='text' id='code' name='code' class='form-control form-control-lg'>";
             echo "</div>";
+            echo "<input type='hidden' name='secret' value='{$secret}'>";
+            if (isset($_SESSION['email'])) {
+              echo "<input type='hidden' name='email' value='{$_SESSION['email']}'>";
+            };
             echo "<button type='submit' class='btn btn-primary'>Submit</button>";
             echo "</form>";
             echo "</div>";
-          } else if (strpos($referrer, 'login.php') !== false) {
+          } elseif (strpos($referrer, 'login.php') !== false) {
             // if coming from login.php, display the login form
             echo "<p class='mt-4'>Let's verify it's you</p>";
-            echo "<form id='verify-form' action='' method='post' class='mt-4 bg-white p-4 rounded shadow-sm'>";
+            echo "<form id='verify-form' action='auth.php' method='post' class='mt-4 bg-white p-4 rounded shadow-sm'>";
             echo "<div class='mb-3'>";
             echo "<label for='code' class='form-label text-black'>Google Authenticator Code:</label>";
             echo "<input type='text' id='2fa-code' name='code' class='form-control' required>";
             echo "</div>";
+            echo "<input type='hidden' name='email' value='{$_SESSION['email']}'>";
             echo "<button type='submit' class='btn btn-primary'>Submit</button>";
             echo "</form>";
           }
         }
 
-        if (isset($_POST['submit'])) {
-          // if the form is submitted, check if the code is valid
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           $code = $_POST['code'];
-          $g = new \Sonata\GoogleAuthenticator\GoogleAuthenticator();
-          if ($g->checkCode($secret, $code)) {
-            if (strpos($referrer, 'register.php') !== false) {
+          $email = $_POST['email'];
+          $secret = isset($_POST['secret']) ? $_POST['secret'] : '';
+
+          // Get the secret from the database if coming from login.php
+          if (empty($secret)) {
+            $stmt = $pdo->prepare("SELECT secret FROM registration WHERE school_email = :email");
+            $stmt->execute(['email' => $email]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $secret = $row['secret'];
+          }
+
+          if ($g->checkCode($secret, $code, 2)) {
+            if (
+              strpos($referrer, 'register.php') !==
+              false
+            ) {
+              // Update the secret code in the database
+              $stmt = $pdo->prepare("UPDATE registration SET secret = :secret WHERE school_email = :email");
+              $stmt->execute(['secret' => $secret, 'email' => $email]);
+
               header('Location: ./login.php');
-            } else if (strpos($referrer, 'login.php') !== false) {
+            } elseif (strpos($referrer, 'login.php') !== false) {
               header('Location: dashboard.php');
             }
             exit;
@@ -95,9 +115,12 @@ include('./header.php');
           }
         }
         ?>
+        ?>
       </div>
     </div>
   </section>
+  <!-- End of registration form -->
+
 </body>
 <script>
   // check if the request is coming from register.php or login.php
