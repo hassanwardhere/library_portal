@@ -114,7 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </section>
     <!-- End of registration form -->
+    <?php include 'footer.php' ?>
 </body>
-<?php include 'footer.php' ?>
-
 </html>

@@ -19,7 +19,7 @@ require_once('./config/db_conn.php')
     <!--Main Navigation-->
     <header>
         <!-- Sidebar -->
-        <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+        <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-secondary">
             <!-- Your new sidebar content goes here -->
             <div class="position-sticky">
                 <div class="list-group list-group-flush mx-3 mt-4">
@@ -54,7 +54,7 @@ require_once('./config/db_conn.php')
         <!-- Sidebar -->
 
         <!-- Navbar -->
-        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
             <!-- Container wrapper -->
             <div class="container-fluid">
                 <!-- Toggle button -->
@@ -64,13 +64,8 @@ require_once('./config/db_conn.php')
 
                 <!-- Brand -->
                 <a class="navbar-brand" href="#">
-                    <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="25" alt="" loading="lazy" />
+                    <img src="./assests/img/MAIN LOGO.jpg" height="25" alt="" loading="lazy" />
                 </a>
-                <!-- Search form -->
-                <form class="d-none d-md-flex input-group w-auto my-auto">
-                    <input autocomplete="off" type="search" class="form-control rounded" placeholder='Search (ctrl + "/" to focus)' style="min-width: 225px" />
-                    <span class="input-group-text border-0"><i class="fas fa-search"></i></span>
-                </form>
 
                 <!-- Right links -->
                 <ul class="navbar-nav ms-auto d-flex flex-row">
@@ -164,11 +159,11 @@ require_once('./config/db_conn.php')
     <!--Main layout-->
     <main style="margin-top: 58px">
         <div class="container pt-4">
-
+            <!-- User content -->
+            <?php include 'user_content.php'; ?>
         </div>
     </main>
     <!--Main layout-->
-    <script src="./assests/js/app.js"></script>
     <?php include 'footer.php' ?>
 </body>
 

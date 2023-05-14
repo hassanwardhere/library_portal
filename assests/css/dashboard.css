@@ -38,3 +38,23 @@ body {
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
 
+/* For the main navbar */
+#main-navbar {
+  background-color: black; /* For dark background */
+  color: white; /* For white text */
+}
+
+/* For the sidebar */
+#sidebarMenu {
+  background-color: black; /* For dark background */
+}
+
+#sidebarMenu .list-group-item {
+  color: white; /* For white text */
+}
+
+/* For the active link in the sidebar */
+#sidebarMenu .list-group-item.active {
+  background-color: white; /* For white background */
+  color: black; /* For black text */
+}
