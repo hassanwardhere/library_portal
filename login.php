@@ -1,7 +1,13 @@
 <?php
-ob_start();
 require_once('config/db_conn.php');
+require_once('config/email_config.php');
 session_start();
+
+// Function to generate OTP
+function generateNumericOTP($n) {
+    $generator = "1357902468";
+    return substr($generator, 0, $n);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $school_email = $_POST['school-email'];
@@ -12,24 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
-        $otp_code = rand(100000, 999999);
+        $otp_code = generateNumericOTP(6);
 
         $sql = "UPDATE registration SET otp_code = :otp_code WHERE school_email = :school_email";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['otp_code' => $otp_code, 'school_email' => $school_email]);
 
         // send email with OTP code to user's email
-        // ...
-        $to = $user['school_email'];
-        $subject = "OTP Code";
-        $message = "Your OTP Code is: " . $otp_code;
-        $headers = "From: Your Library <hassan@hassanwardhere.com>";
+        $subject = "OTP for Login";
+        $body = "Your One Time Password for login is " . $otp_code;
+        sendEmail($school_email, $subject, $body);
 
-        mail($to, $subject, $message, $headers);
-
-        ob_start(); // start output buffering
-        header("Location: email-otp.php"); // redirect
-        ob_end_flush(); // end output buffering and send headers
+        // redirect to OTP verification page
+        header("Location: otp_verification.php");
         exit();
     } else {
         $error_msg = "Invalid login credentials.";
@@ -37,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 include 'header.php';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

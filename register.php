@@ -1,5 +1,13 @@
 <?php
 require_once('config/db_conn.php');
+require_once('config/email_config.php');
+
+// Function to generate OTP
+function generateNumericOTP($n)
+{
+    $generator = "1357902468";
+    return substr($generator, 0, $n);
+}
 
 // validate inputs and check if email is already registered
 $email_error = '';
@@ -9,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $school_email = $_POST['school-email'];
     $password = $_POST['password'];
     $user_type = $_POST['user-type'];
+
+    // Generate 6 digit OTP
+    $otp = generateNumericOTP(6);
 
     if (empty($full_name) || empty($school_email) || empty($password)) {
         $email_error = 'Please fill all required fields';
@@ -26,21 +37,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // insert user data into database
     if (empty($email_error)) {
-        $sql = "INSERT INTO registration (full_name, school_email, password, user_type) VALUES (:full_name, :school_email, :password, :user_type)";
+        $sql = "INSERT INTO registration (full_name, school_email, password, user_type, otp_code, created_at, updated_at, is_active) VALUES (:full_name, :school_email, :password, :user_type, :otp_code, NOW(), NOW(), 0)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'full_name' => $full_name,
             'school_email' => $school_email,
-            'password' => $password,
+            'password' => password_hash($password, PASSWORD_DEFAULT), // hash password
             'user_type' => $user_type,
+            'otp_code' => $otp
         ]);
 
-        // redirect to Login page
-        header("Location: auth.php");
+        // Set the subject and body of the email
+        $subject = 'OTP for Email Verification';
+        $body = "Your One Time Password for email verification is " . $otp;
+
+        // Send the email
+        sendEmail($school_email, $subject, $body);
+
+        // Redirect to OTP verification page
+        header("Location: otp_verification.php");
         exit();
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,8 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <section class="register-hero-section">
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-center">
-
-
                 <div class="container mt-5 bg-white py-4">
                     <h2 class="text-center mb-4">Register</h2>
                     <form action="" method="POST">
@@ -112,9 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </form>
                     <p class="text-center mt-3">Already have an account? <a href="login.php">Login</a></p>
                 </div>
-
-
-
             </div>
         </div>
     </section>
