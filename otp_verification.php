@@ -12,29 +12,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "SELECT * FROM registration WHERE otp_code = :otp AND school_email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['otp' => $otp, 'email' => $email]);
+        $user = $stmt->fetch();
 
-        if ($stmt->fetch(PDO::FETCH_ASSOC)) {
-            $sql = "UPDATE registration SET is_active = 1 WHERE school_email = :email";
+        if ($user) {
+            // Clear the OTP code from database after successful login
+            $sql = "UPDATE registration SET otp_code = NULL WHERE school_email = :email";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['email' => $email]);
 
-            // check if user came from login or register
-            $previous_page = $_SERVER['HTTP_REFERER'];
-            if (strpos($previous_page, 'login.php') !== false) {
-                // redirect to Dashboard page
-                header("Location: dashboard.php");
-            } else {
-                // redirect to Login page
-                header("Location: login.php");
-            }
+            // Redirect to Dashboard page
+            header("Location: dashboard.php");
             exit();
         } else {
             $otp_error = 'Invalid OTP';
         }
     }
 }
-
-
 ?>
 
 <!DOCTYPE html>

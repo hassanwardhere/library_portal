@@ -1,12 +1,27 @@
 <?php
 require_once('config/db_conn.php');
-require_once('config/email_config.php');
+// require_once('config/email_config.php');
 session_start();
 
 // Function to generate OTP
 function generateNumericOTP($n) {
-    $generator = "1357902468";
-    return substr($generator, 0, $n);
+    $generator = "0123456789";
+    $result = "";
+
+    for ($i = 1; $i <= $n; $i++) {
+        $result .= substr($generator, (rand()%(strlen($generator))), 1);
+    }
+
+    return $result;
+}
+
+
+function sendEmail($to, $subject, $body) {
+    $headers = 'From: jupiter.abdullahi@gmail.com' . "\r\n" .
+    'Reply-To: jupiter.abdullahi@gmail.com' . "\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+
+    mail($to, $subject, $body, $headers);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,38 +33,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
-        $otp_code = generateNumericOTP(6);
+        if ($user['status'] === 'suspended') {
+            $error_msg = "Your account has been suspended.";
+        } elseif ($user['status'] === 'deactivated') {
+            $error_msg = "Your account has been deactivated.";
+        } else {
+            $otp_code = generateNumericOTP(6);
 
-        $sql = "UPDATE registration SET otp_code = :otp_code WHERE school_email = :school_email";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['otp_code' => $otp_code, 'school_email' => $school_email]);
+            $sql = "UPDATE registration SET otp_code = :otp_code WHERE school_email = :school_email";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['otp_code' => $otp_code, 'school_email' => $school_email]);
 
-        // send email with OTP code to user's email
-        $subject = "OTP for Login";
-        $body = "Your One Time Password for login is " . $otp_code;
-        sendEmail($school_email, $subject, $body);
+            // send email with OTP code to user's email
+            $subject = "OTP for Login";
+            $body = "Your One Time Password for login is " . $otp_code;
+            sendEmail($school_email, $subject, $body);
 
-        // redirect to OTP verification page
-        header("Location: otp_verification.php");
-        exit();
+            // store the email in session variable
+            $_SESSION['school_email'] = $school_email;
+
+            // redirect to OTP verification page
+            header("Location: otp_verification.php");
+            exit();
+        }
     } else {
         $error_msg = "Invalid login credentials.";
     }
 }
-include 'header.php';
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <?php include 'header.php';?>
 </head>
-
 <body>
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">

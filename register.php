@@ -1,13 +1,5 @@
 <?php
 require_once('config/db_conn.php');
-require_once('config/email_config.php');
-
-// Function to generate OTP
-function generateNumericOTP($n)
-{
-    $generator = "1357902468";
-    return substr($generator, 0, $n);
-}
 
 // validate inputs and check if email is already registered
 $email_error = '';
@@ -17,9 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $school_email = $_POST['school-email'];
     $password = $_POST['password'];
     $user_type = $_POST['user-type'];
-
-    // Generate 6 digit OTP
-    $otp = generateNumericOTP(6);
 
     if (empty($full_name) || empty($school_email) || empty($password)) {
         $email_error = 'Please fill all required fields';
@@ -37,31 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // insert user data into database
     if (empty($email_error)) {
-        $sql = "INSERT INTO registration (full_name, school_email, password, user_type, otp_code, created_at, updated_at, is_active) VALUES (:full_name, :school_email, :password, :user_type, :otp_code, NOW(), NOW(), 0)";
+        $sql = "INSERT INTO registration (full_name, school_email, password, user_type, agree, created_at, otp_code, updated_at, last_login, is_active, email_verified_at, status) VALUES (:full_name, :school_email, :password, :user_type, '', NOW(), '', NOW(), NOW(), 0, NULL, 'active')";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'full_name' => $full_name,
             'school_email' => $school_email,
             'password' => password_hash($password, PASSWORD_DEFAULT), // hash password
-            'user_type' => $user_type,
-            'otp_code' => $otp
+            'user_type' => $user_type
         ]);
 
-        // Set the subject and body of the email
-        $subject = 'OTP for Email Verification';
-        $body = "Your One Time Password for email verification is " . $otp;
-
-        // Send the email
-        sendEmail($school_email, $subject, $body);
-
-        // Redirect to OTP verification page
-        header("Location: otp_verification.php");
+        // Redirect to Login page
+        header("Location: login.php");
         exit();
     }
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
