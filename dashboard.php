@@ -16,7 +16,7 @@ require_once('./config/db_conn.php')
     <?php include 'header.php' ?>
 </head>
 
-<body class="mx-auto" style="width: 1000px; padding-top: 50px; padding-left: 100px">
+<body class="mx-auto" style="width: 1301px; padding-top: 150px; padding-left: 180px">
     <!--Main Navigation-->
     <header>
         <!-- Sidebar -->
@@ -34,7 +34,7 @@ require_once('./config/db_conn.php')
                         <div id="alllinks" class="list-group-item list-group-item-action py-2 ripple">
                             <i class="fas fa-book fa-fw me-3"></i><span>Library</span>
                             <div class="list-group">
-                                <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple <?php if ($_GET['page'] == 'books') echo 'active'; ?>"><span>Books</span></a>
+                                <a href="?page=books" id="alllinks" class="list-group-item list-group-item-action py-2 ripple <?php if ($_GET['page'] == 'books') echo 'active'; ?>"><span>Books</span></a>
                                 <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple"><span>Articles</span></a>
                                 <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple"><span>Journals</span></a>
                                 <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple"><span>Magazines</span></a>
@@ -111,6 +111,9 @@ require_once('./config/db_conn.php')
                 break;
             case 'users':
                 include './user_content.php'; // Include the users content file
+                break;
+            case 'books':
+                include './books.php'; // Include the users content file
                 break;
                 // ...
         }
