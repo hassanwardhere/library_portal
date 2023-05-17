@@ -29,7 +29,7 @@ $user = $stmt->fetch();
 
 // If user not found, redirect to users page
 if (!$user) {
-    header("Location: users.php");
+    header('Location: dashboard.php?page=users');
     exit();
 }
 ?>

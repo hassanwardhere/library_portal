@@ -1,10 +1,16 @@
 body {
   background-color: #fbfbfb;
+  height: 100vh;
 }
+
 @media (min-width: 991.98px) {
   main {
     padding-left: 240px;
   }
+}
+
+.sidebarMenu {
+  margin-left: 250px;
 }
 
 /* Sidebar */
@@ -13,7 +19,7 @@ body {
   top: 0;
   bottom: 0;
   left: 0;
-  padding: 58px 0 0; /* Height of navbar */
+  padding: 58px 0 0 0; /* Height of navbar */
   box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
   width: 240px;
   z-index: 600;
@@ -38,23 +44,42 @@ body {
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
 
-/* For the main navbar */
-#main-navbar {
-  background-color: black; /* For dark background */
-  color: white; /* For white text */
+/* Set the color of the top navbar to black */
+.navbar-black {
+  background-color: #000;
 }
 
-/* For the sidebar */
-#sidebarMenu {
-  background-color: black; /* For dark background */
+/* Set the color of the sidebar to blue */
+.sidebar-blue {
+  background-color: #0000ff;
 }
 
-#sidebarMenu .list-group-item {
-  color: white; /* For white text */
+/* Set the color of all text and icons in the navbar and sidebar to white */
+.navbar-black *,
+.sidebar-blue * {
+  color: #fff !important;
 }
 
-/* For the active link in the sidebar */
-#sidebarMenu .list-group-item.active {
-  background-color: white; /* For white background */
-  color: black; /* For black text */
+/* Set the color of all icons to white */
+.fas {
+  color: #fff !important;
+}
+
+/* Add a dropshadow to the navbar */
+.navbar-black {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+#alllinks {
+  background-color: blue;
+}
+
+#alllinks:hover {
+  background-color: rgb(255, 81, 0);
+  color: white;
+}
+
+#alllinks.active {
+  background-color: rgb(255, 81, 0);
+  color: white;
 }

@@ -13,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute(['full_name' => $full_name, 'school_email' => $school_email, 'password' => $password, 'user_type' => $user_type, 'status' => $status]);
 
     $success_msg = "User added successfully.";
+    header('Location: dashboard.php?page=users');
+
 }
 ?>
 

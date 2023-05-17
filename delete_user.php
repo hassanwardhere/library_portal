@@ -11,6 +11,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute(['id' => $id]);
 
 // Redirect to users page
-header("Location: users.php");
+header('Location: dashboard.php?page=users');
 exit();
 ?>

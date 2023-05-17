@@ -1,7 +1,8 @@
 <?php
 require_once('./config/db_conn.php')
-
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,46 +16,48 @@ require_once('./config/db_conn.php')
     <?php include 'header.php' ?>
 </head>
 
-<body>
+<body class="mx-auto" style="width: 1000px; padding-top: 50px; padding-left: 100px">
     <!--Main Navigation-->
     <header>
         <!-- Sidebar -->
-        <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-secondary">
-            <!-- Your new sidebar content goes here -->
-            <div class="position-sticky">
-                <div class="list-group list-group-flush mx-3 mt-4">
-                    <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-                        <i class="fas fa-home fa-fw me-3"></i><span>Home</span>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-                        <i class="fas fa-users fa-fw me-3"></i><span>Users</span>
-                    </a>
-                    <div class="list-group-item list-group-item-action py-2 ripple">
-                        <i class="fas fa-book fa-fw me-3"></i><span>Library</span>
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action py-2 ripple"><span>Books</span></a>
-                            <a href="#" class="list-group-item list-group-item-action py-2 ripple"><span>Articles</span></a>
-                            <a href="#" class="list-group-item list-group-item-action py-2 ripple"><span>Journals</span></a>
-                            <a href="#" class="list-group-item list-group-item-action py-2 ripple"><span>Magazines</span></a>
-                            <a href="#" class="list-group-item list-group-item-action py-2 ripple"><span>Newspaper</span></a>
+        <div class="container">
+            <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse sidebar-blue">
+                <!-- Your new sidebar content goes here -->
+                <div class="position-sticky">
+                    <div class="list-group list-group-flush mx-3 mt-4 sidebar-blue">
+                        <a href="?page=home" id="alllinks" class="list-group-item list-group-item-action py-2 ripple <?php if ($_GET['page'] == 'home') echo 'active'; ?>">
+                            <i class="fas fa-home fa-fw me-3"></i><span>Home</span>
+                        </a>
+                        <a href="?page=users" id="alllinks" class="list-group-item list-group-item-action py-2 ripple <?php if ($_GET['page'] == 'users') echo 'active'; ?>">
+                            <i class="fas fa-users fa-fw me-3"></i><span>Users</span>
+                        </a>
+                        <div id="alllinks" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-book fa-fw me-3"></i><span>Library</span>
+                            <div class="list-group">
+                                <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple <?php if ($_GET['page'] == 'books') echo 'active'; ?>"><span>Books</span></a>
+                                <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple"><span>Articles</span></a>
+                                <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple"><span>Journals</span></a>
+                                <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple"><span>Magazines</span></a>
+                                <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple"><span>Newspaper</span></a>
+                            </div>
                         </div>
+                        <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-book-reader fa-fw me-3"></i><span>My Books</span>
+                        </a>
+                        <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-gavel fa-fw me-3"></i><span>My Penalties</span>
+                        </a>
+                        <a href="#" id="alllinks" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-user-circle fa-fw me-3"></i><span>My Account</span>
+                        </a>
                     </div>
-                    <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-                        <i class="fas fa-book-reader fa-fw me-3"></i><span>My Books</span>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-                        <i class="fas fa-gavel fa-fw me-3"></i><span>My Penalties</span>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-                        <i class="fas fa-user-circle fa-fw me-3"></i><span>My Account</span>
-                    </a>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
         <!-- Sidebar -->
 
         <!-- Navbar -->
-        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light fixed-top navbar-black">
             <!-- Container wrapper -->
             <div class="container-fluid">
                 <!-- Toggle button -->
@@ -69,74 +72,6 @@ require_once('./config/db_conn.php')
 
                 <!-- Right links -->
                 <ul class="navbar-nav ms-auto d-flex flex-row">
-                    <!-- Notification dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-bell"></i>
-                            <span class="badge rounded-pill badge-notification bg-danger">1</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Some news</a></li>
-                            <li><a class="dropdown-item" href="#">Another news</a></li>
-                            <li>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Icon -->
-                    <li class="nav-item">
-                        <a class="nav-link me-3 me-lg-0" href="#">
-                            <i class="fas fa-fill-drip"></i>
-                        </a>
-                    </li>
-                    <!-- Icon -->
-                    <li class="nav-item me-3 me-lg-0">
-                        <a class="nav-link" href="#">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </li>
-
-                    <!-- Icon dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                            <i class="united kingdom flag m-0"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="united kingdom flag"></i>English
-                                    <i class="fa fa-check text-success ms-2"></i></a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="poland flag"></i>Polski</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="china flag"></i>中文</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="japan flag"></i>日本語</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="germany flag"></i>Deutsch</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="france flag"></i>Français</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="spain flag"></i>Español</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="russia flag"></i>Русский</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="portugal flag"></i>Português</a>
-                            </li>
-                        </ul>
-                    </li>
-
                     <!-- Avatar -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
@@ -156,15 +91,34 @@ require_once('./config/db_conn.php')
     </header>
     <!--Main Navigation-->
 
-    <!--Main layout-->
-    <main style="margin-top: 58px">
-        <div class="container pt-4">
-            <!-- User content -->
-            <?php include 'user_content.php'; ?>
+    <!-- Main layout-->
+    <!-- <main style="margin-top: 58px">
+        <div class="container pt-4"> -->
+    <!-- User content -->
+    <!-- 
+                
         </div>
-    </main>
-    <!--Main layout-->
+    </main> -->
+    <!--Main layout -->
+    <?php
+
+    if (isset($_GET['page'])) {
+        $page = $_GET['page'];
+
+        switch ($page) {
+            case 'home':
+                include 'home.php'; // Include the home content file
+                break;
+            case 'users':
+                include './user_content.php'; // Include the users content file
+                break;
+                // ...
+        }
+    }
+
+    ?>
     <?php include 'footer.php' ?>
+    <script src="./assests/js/app.js"></script>
 </body>
 
 </html>
